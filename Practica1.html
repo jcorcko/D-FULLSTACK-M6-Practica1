@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+        <style>
+            .color-box {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin: 7px;
+                display: inline-block;
+            }
+
+            .clic{
+                cursor: pointer;
+            }
+
+            .quantity button{
+                border-radius: 50%;
+                display: inline-block;
+                width: 30px;
+            }
+            .quantity div{
+                text-align: center;
+                min-width: 30px;
+                display: inline-block;
+                font-weight: bold;
+            }
+            .buy-box{
+                margin: 20px;
+            }
+            footer {
+                
+                text-align: center;
+                padding: 30px 10px;
+                margin-top: 50px;
+                min-height: 100px;
+            }
+            .container{
+                margin-top: 50px;
+            }
+            .producto-relacionado-precio{
+                background: orangered;
+                color: white;
+                text-align: center;
+                padding: 10px; 
+            }
+        </style>
+</head>
+
+<body>
+<div id="app">
+    <nav class="navbar navbar-expand-lg " :style="`background-color: ${configuracionPagina.menuColor}`">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">{{ configuracionPagina.marca }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">                    
+                    <li v-for="menu of configuracionPagina.menus">
+                        <a class="nav-link" :href="menu.url">{{ menu.etiqueta }}</a>                        
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+            <h3>{{ producto.nombre }}</h3>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 ">
+                <img :src="producto.imagen"
+                    alt="" width="100%">
+            </div>
+            <div class="col-12 col-sm-6  col-md-8">
+                <h6>{{ producto.descripcion }}</h6>
+                <div class="p-3 mb-2 text-white" v-bind:style="configuracionPagina.precioEstilos">
+                    Precio: {{ producto.precio }} BOB
+                </div>
+                <h5>Color</h5>
+                <div>
+                    <div v-for = "color of producto.colores" class="color-box clic" :style="`background: ${color}`"></div>                    
+                </div>
+                <h5>Cantidad</h5>
+                <div class="quantity">
+                    <button>-</button> <div>1</div> <button>+</button>
+                </div>
+                <div class="buy-box">
+                    <button type="button" class="btn btn-primary" v-on:click.once="comprarAhora(producto)">Comprar</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container ">
+
+        <div class="row">
+            <h4>Productos relacionados</h4>
+        </div>
+        <div class="row">
+            <div class="col" v-for = "item of productosRelacionados">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.nombre }}</h5>
+                        <img :src="item.imagen"
+                    alt="" width="100%">
+                        <p class="card-text">{{ item.descripcion }}</p>
+                            <div class="producto-relacionado-precio">Precio: {{ item.precio }}BOB</div>
+                        <div>
+                <div>
+                    <div v-for = "color of item.colores" class="color-box clic" :style="`background: ${color}`"></div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer :style="`background-color: ${configuracionPagina.footerColor}`">
+        
+    </footer>
+</div>
+
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                configuracionPagina: {
+                    marca: "MegaDron", //
+                    menuColor: "lightblue", //
+                    footerColor: "slategrey", //
+                    precioEstilos: "background: orangered; color: white; font-weight: bold", //
+                    menus: [ //
+                        {
+                            etiqueta: "Inicio",
+                            url: "?"
+                        },
+                        {
+                            etiqueta: "Tienda",
+                            url: "?"
+                        }
+                    ]
+                },
+                producto: {
+                    id: 1,
+                    imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbq-hHOmYrjV-ihacW-xpSnXrUo6b1TR6A2PjKX8RpEw5KIAVhi4Fp0Lp7zFCioRKUfb0&usqp=CAU",
+                    nombre: "Dron LU3 MAX GPS 8K HD", //
+                    descripcion: "Dron LU3 MAX GPS 8K HD profesional con cámara Dual, cardán autoestabilizador, Motor sin escobillas para evitar obstáculos, cuadricóptero plegable", //
+                    precio:"620", //
+                    colores: ["red", "blue", "black", "yellow"] //
+                },
+                productosRelacionados:[
+                    {
+                        id:2,
+                        imagen: "https://i.ebayimg.com/images/g/QLUAAOSwgCVhDqgA/s-l500.jpg",
+                        nombre: "KF102",
+                        descripcion: "Dron plegable KF102 con Gps, 8K, cámara Dual HD, 2 ejes, cardán, Motor sin escobillas, fotografía aérea, 1200M de distancia, novedad de 2022",
+                        precio:"1180",
+                        colores: ["orange", "blue"]
+                    },
+                    {
+                        id:3,
+                        imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdlemzwfLHJk7Pr41QyvmjLuf8G2DR_fWVRGR8Xz2l4VO8vUJp5L4LCE6X6HXYFtL6mYE&usqp=CAU",
+                        nombre: "KBDFA-Dron E888 RC",
+                        descripcion: "KBDFA-Dron E888 RC, cuadricóptero profesional FPV, 4K HD, fotografía aérea, evitación de obstáculos, helicóptero, juguetes de distancia",
+                        precio:"154",
+                        colores: ["black", "midnightblue"]
+                    },
+                    {
+                        id:4,
+                        imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToM2OXq9lgAAM1trXF9MGKRJEnHDSCFuf8cp4qW0gphz2wblcA0YGQiy12BFq-nJeUB5g&usqp=CAU",
+                        nombre: "Dron Profesional 4K con GPS",
+                        descripcion: "Dron Profesional 4K con GPS, 8K, cámara HD, 3 ejes, cardán antivibración, evitación de obstáculos, fotografía aérea, Quadcopter, nuevo",
+                        precio:"1800",
+                        colores: ["teal", "blue", "slategrey", "navy"]
+                    }
+                ],
+                pedido:{
+                    id:null,
+                    cantidad: 1,
+                    color:null
+                },
+            },
+            methods: {
+                comprarAhora: function (producto) {
+                    alert(producto.id + " " + producto.nombre + " " + " " + producto.precio)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
